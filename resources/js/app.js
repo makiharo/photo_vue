@@ -12,6 +12,9 @@ window.Vue = require('vue');
 // ルート定義のインポート
 import router from './router';
 
+// ストアをインポート
+import store from './store';
+
 // ルートコンポーネントのインポート
 import App from './App.vue';
 
@@ -38,6 +41,7 @@ const app = new Vue({
     el: '#app',
     // ルーティングの読み込み
     router,
+    store,
     // ルートコンポーネントの使用宣言
     components: {App},
     // ルートコンポーネントの描写
