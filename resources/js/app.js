@@ -9,6 +9,12 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+// ルート定義のインポート
+import router from './router';
+
+// ルートコンポーネントのインポート
+import App from './App.vue';
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -29,5 +35,11 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  */
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    // ルーティングの読み込み
+    router,
+    // ルートコンポーネントの使用宣言
+    components: {App},
+    // ルートコンポーネントの描写
+    template: '<App />'
 });
