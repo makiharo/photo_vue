@@ -37,13 +37,21 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-const app = new Vue({
-    el: '#app',
-    // ルーティングの読み込み
-    router,
-    store,
-    // ルートコンポーネントの使用宣言
-    components: {App},
-    // ルートコンポーネントの描写
-    template: '<App />'
-});
+ // アプリ起動時、Vue インスタンス生成前に
+ //  currentUser アクション呼び出します。
+ const createApp = async () => {
+     await store.dispatch('auth/currentUser')
+     new Vue({
+        el: '#app',
+        // ルーティングの読み込み
+        router,
+        store,
+        // ルートコンポーネントの使用宣言
+        components: { App },
+        // ルートコンポーネントの描写
+        template: '<App />'
+    })
+ }
+
+ createApp()
+

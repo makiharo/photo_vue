@@ -1,5 +1,6 @@
 
 window._ = require('lodash');
+import { getCookieValue } from './util'
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -12,7 +13,7 @@ try {
     window.$ = window.jQuery = require('jquery');
 
     require('bootstrap');
-} catch (e) {}
+} catch (e) { }
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -22,22 +23,25 @@ try {
 
 window.axios = require('axios');
 
+// Ajaxリクエストであることを示すヘッダーを付与する
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-/**
- * Next we will register the CSRF Token as a common header with Axios so that
- * all outgoing HTTP requests automatically have it attached. This is just
- * a simple convenience so we don't have to attach every token manually.
- */
+// interceptors.requestでリクエストした時に処理するアクション？
+// interceptorsで処理の差し込みができるらしい
+// configには送信前のdata, urlが入る。そこでヘッダーを付与している。
+window.axios.interceptors.request.use(config => {
+    // クッキーからトークンを取り出してヘッダーに添付する
+    config.headers['X-XSRF-TOKEN'] = getCookieValue('XSRF-TOKEN')
+    return config
+})
 
-let token = document.head.querySelector('meta[name="csrf-token"]');
+// let token = document.head.querySelector('meta[name="csrf-token"]');
 
-if (token) {
-    console.log(token.content);
-    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-} else {
-    console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}
+// if (token) {
+//     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+// } else {
+//     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+// }
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

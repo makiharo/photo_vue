@@ -5,7 +5,11 @@ const state = {
     user: null
 }
 
-const getters = {}
+const getters = {
+    check: state => !!state.user,
+    username: state => state.user ? state.user.name : ''
+}
+
 
 // 中間処理？、セッターとかできる
 const mutations = {
@@ -23,13 +27,21 @@ const actions = {
         // commitでミューテーションを読んでいる
         context.commit('setUser', response.data);
     },
+
     async login(context, data) {
         const response = await Axios.post('/api/login', data);
         context.commit('setUser', response.data);
     },
-    async logout (context) {
+
+    async logout(context) {
         const response = await Axios.post('/api/logout');
         context.commit('setUser', null);
+    },
+
+    async currentUser(context) {
+        const response = await Axios.get('/api/user')
+        const user = response.data || null
+        context.commit('setUser', user)
     }
 }
 
