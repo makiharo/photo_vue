@@ -43,8 +43,8 @@
             return {
                 tab: 1,
                 loginForm: {
-                    email: '',
-                    password: ''
+                    email: 'sample@mail',
+                    password: 'password'
                 },
                 registerForm: {
                     name: 'kiku',
@@ -66,6 +66,13 @@
                 // 1引数にアクション名、呼び出し先設定で、namespace: trueとしているので
                 // モージュル名＋アクション名で指定
                 await this.$store.dispatch('auth/register', this.registerForm)
+
+                // トップページに移動する
+                this.$router.push('/')
+            },
+            async login() {
+                // authストアのloginアクションを呼び出す
+                await this.$store.dispatch('auth/login', this.loginForm);
 
                 // トップページに移動する
                 this.$router.push('/')

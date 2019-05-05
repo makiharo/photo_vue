@@ -20,6 +20,10 @@ const actions = {
         const response = await Axios.post('/api/register', data);
         // commitでミューテーションを読んでいる
         context.commit('setUser', response.data);
+    },
+    async login(context, data) {
+        const response = await Axios.post('/api/login', data);
+        context.commit('setUser', response.data);
     }
 }
 
