@@ -1,11 +1,13 @@
 import Axios from "axios";
 
+// 保持する値の定義
 const state = {
     user: null
 }
 
 const getters = {}
 
+// 中間処理？、セッターとかできる
 const mutations = {
     // 1引数はstateで決まっている
     setUser(state, user) {
@@ -24,6 +26,10 @@ const actions = {
     async login(context, data) {
         const response = await Axios.post('/api/login', data);
         context.commit('setUser', response.data);
+    },
+    async logout (context) {
+        const response = await Axios.post('/api/logout');
+        context.commit('setUser', null);
     }
 }
 
