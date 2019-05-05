@@ -54595,10 +54595,14 @@ var app = new Vue({
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
   \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./util */ "./resources/js/util.js");
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -54618,22 +54622,23 @@ try {
  */
 
 
-window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-/**
- * Next we will register the CSRF Token as a common header with Axios so that
- * all outgoing HTTP requests automatically have it attached. This is just
- * a simple convenience so we don't have to attach every token manually.
- */
+window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js"); // Ajaxリクエストであることを示すヘッダーを付与する
 
-var token = document.head.querySelector('meta[name="csrf-token"]');
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'; // interceptors.requestでリクエストした時に処理するアクション？
+// interceptorsで処理の差し込みができるらしい
+// configには送信前のdata, urlが入る。そこでヘッダーを付与している。
 
-if (token) {
-  console.log(token.content);
-  window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-} else {
-  console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}
+window.axios.interceptors.request.use(function (config) {
+  // クッキーからトークンを取り出してヘッダーに添付する
+  config.headers['X-XSRF-TOKEN'] = Object(_util__WEBPACK_IMPORTED_MODULE_0__["getCookieValue"])('XSRF-TOKEN');
+  return config;
+}); // let token = document.head.querySelector('meta[name="csrf-token"]');
+// if (token) {
+//     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+// } else {
+//     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+// }
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -55187,6 +55192,55 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (store);
+
+/***/ }),
+
+/***/ "./resources/js/util.js":
+/*!******************************!*\
+  !*** ./resources/js/util.js ***!
+  \******************************/
+/*! exports provided: getCookieValue */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCookieValue", function() { return getCookieValue; });
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+/**
+ * クッキーの値を取得する
+ * @param {String} searchKey 検索するキー
+ * @returns {String} キーに対応する値
+ */
+function getCookieValue(searchKey) {
+  if (typeof searchKey === 'undefined') {
+    return '';
+  }
+
+  var val = ''; // document.cookieで
+  // 下記の形式で取れる
+  // 「name=12345;token=67890;key=abcde」
+  // 分解して配列化、ループして指定のキーを探して値を取る
+
+  document.cookie.split(';').forEach(function (cookie) {
+    var _cookie$split = cookie.split('='),
+        _cookie$split2 = _slicedToArray(_cookie$split, 2),
+        key = _cookie$split2[0],
+        value = _cookie$split2[1];
+
+    if (key === searchKey) {
+      return val = value;
+    }
+  });
+  console.log(val);
+  return val;
+}
 
 /***/ }),
 
