@@ -46,6 +46,9 @@ const actions = {
 }
 
 export default {
+    // actions指定時にnamespaceを利用できる
+    // 以下のように
+    // this.$store.dispatch('auth/login', this.loginForm);
     namespaced: true,
     state,
     getters,
