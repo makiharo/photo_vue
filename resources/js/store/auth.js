@@ -1,10 +1,27 @@
-const state = {}
+import Axios from "axios";
+
+const state = {
+    user: null
+}
 
 const getters = {}
 
-const mutations = {}
+const mutations = {
+    // 1引数はstateで決まっている
+    setUser(state, user) {
+        state.user = user
+    }
+}
 
-const actions = {}
+const actions = {
+    // 1引数はcontextで決まっている
+    async register(context, data) {
+        console.log(data);
+        const response = await Axios.post('/api/register', data);
+        // commitでミューテーションを読んでいる
+        context.commit('setUser', response.data);
+    }
+}
 
 export default {
     namespaced: true,

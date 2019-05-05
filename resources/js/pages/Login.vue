@@ -47,10 +47,10 @@
                     password: ''
                 },
                 registerForm: {
-                    name: '',
-                    email: '',
-                    password: '',
-                    password_confirmation: ''
+                    name: 'kiku',
+                    email: 'sample@mail',
+                    password: 'password',
+                    password_confirmation: 'password'
                 }
             }
         },
@@ -58,8 +58,17 @@
             login() {
                 console.log(this.loginForm);
             },
-            register() {
-                console.log(this.registerForm)
+            async register() {
+                // authストアのresigterアクションを呼び出す
+                // $storeでstoreを呼び出せる
+                // store/index.jsで Vue.use(Vuex) で宣言してるので可
+                // dispatchでアクション呼び出し
+                // 1引数にアクション名、呼び出し先設定で、namespace: trueとしているので
+                // モージュル名＋アクション名で指定
+                await this.$store.dispatch('auth/register', this.registerForm)
+
+                // トップページに移動する
+                this.$router.push('/')
             }
         },
     }
