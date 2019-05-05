@@ -1,10 +1,11 @@
 import Axios from "axios";
-import { OK } from '../util'
+import { OK, UNPROCESSABLE_ENTITY } from '../util'
 
 // 保持する値の定義
 const state = {
     user: null,
-    apiStatus: null
+    apiStatus: null,
+    loginErrorMessages: null
 }
 
 const getters = {
@@ -18,6 +19,12 @@ const mutations = {
     // 1引数はstateで決まっている
     setUser(state, user) {
         state.user = user
+    },
+    setApiStatus(state, status) {
+        state.apiStatus = status
+    },
+    setLoginErrorMessages(state, messages) {
+        state.loginErrorMessages = messages
     }
 }
 
@@ -42,9 +49,20 @@ const actions = {
         }
         context.commit('setApiStatus', false)
 
-        // 別モジュールのmutationを呼び出す
-        // その場合は3引数にroute trueを指定する必要がある
-        context.commit('error/setCode', response.status, { root: true })
+        /**
+         * バリデーションエラーの場合
+         * ページコンポーネント内でエラーの表示を行う必要があるので、
+         * ステータスコードが UNPROCESSABLE_ENTITY の場合は
+         *  error/setCode ミューテーションを呼びません。
+         * 代わりに loginErrorMessages にエラーメッセージをセットします
+         */
+        if (response.status === UNPROCESSABLE_ENTITY) {
+            context.commit('setLoginErrorMessages', response.data.errors)
+        } else {
+            // 別モジュールのmutationを呼び出す
+            // その場合は3引数にroute trueを指定する必要がある
+            context.commit('error/setCode', response.status, { root: true })
+        }
     },
 
     async logout(context) {
@@ -55,6 +73,9 @@ const actions = {
     async currentUser(context) {
         const response = await Axios.get('/api/user')
         const user = response.data || null
+        // 現在のユーザー
+        console.log("現在ユーザー");
+        console.log(user);
         context.commit('setUser', user)
     }
 }

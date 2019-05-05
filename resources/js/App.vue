@@ -34,6 +34,7 @@
             }
         },
         watch: {
+            // エラーコードを監視して変化があればリダイレクト
             errorCode: {
                 handler(val) {
                     if (val === INTERNAL_SERVER_ERROR) {
@@ -42,6 +43,7 @@
                 },
                 immediate: true
             },
+            // ルートに変化があればsetCodeを解除？
             $route() {
                 this.$store.commit('error/setCode', null)
             }
