@@ -17,8 +17,9 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        // 非ログイン時はAPIのuserにリダイレクトするようにする
         if (Auth::guard($guard)->check()) {
-            return redirect('/home');
+            return redirect()->route('user');
         }
 
         return $next($request);
