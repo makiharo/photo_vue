@@ -43,7 +43,7 @@ const app = new Vue({
     router,
     store,
     // ルートコンポーネントの使用宣言
-    components: {App},
+    components: { App },
     // ルートコンポーネントの描写
     template: '<App />'
 });
