@@ -35,6 +35,17 @@ window.axios.interceptors.request.use(config => {
     return config
 })
 
+/**
+ * axios の response インターセプターはレスポンスを受けた後の
+ * 処理を上書きします。第一引数が成功時の処理ですが、
+ * こちらは変更しないのでそのまま response を返しています。
+ * 第二引数は失敗時の処理で、こちらを変更しています。
+ */
+window.axios.interceptors.response.use(
+    response => response,
+    error => error.response || error
+)
+
 // let token = document.head.querySelector('meta[name="csrf-token"]');
 
 // if (token) {
