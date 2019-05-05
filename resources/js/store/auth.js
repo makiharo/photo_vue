@@ -1,8 +1,10 @@
 import Axios from "axios";
+import { OK } from '../util'
 
 // 保持する値の定義
 const state = {
-    user: null
+    user: null,
+    apiStatus: null
 }
 
 const getters = {
@@ -29,8 +31,20 @@ const actions = {
     },
 
     async login(context, data) {
-        const response = await Axios.post('/api/login', data);
-        context.commit('setUser', response.data);
+        context.commit('setApiStatus', null)
+        const response = await Axios.post('/api/login', data)
+            .catch(err => err.response || err)
+
+        if (response.status === OK) {
+            context.commit('setApiStatus', true)
+            context.commit('setUser', response.data)
+            return false
+        }
+        context.commit('setApiStatus', false)
+
+        // 別モジュールのmutationを呼び出す
+        // その場合は3引数にroute trueを指定する必要がある
+        context.commit('error/setCode', response.status, { root: true })
     },
 
     async logout(context) {
