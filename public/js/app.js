@@ -55257,6 +55257,7 @@ var routes = [{
 }]; // VueRouterインスタンスを作成する
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
+  // シャープがなくなる
   mode: 'history',
   routes: routes
 }); // VueRouterインスタンスをエクスポートする
@@ -55583,6 +55584,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./auth */ "./resources/js/store/auth.js");
 /* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./error */ "./resources/js/store/error.js");
 
+ // 使用storeのimport
 
 
 
