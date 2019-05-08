@@ -84,6 +84,9 @@
 
                 // イベントを発行し、フォームを閉じるようにする
                 this.$emit('input', false)
+
+                // 画面遷移
+                this.$router.push(`/photos/${response.data.id}`)
             }
         }
     }
