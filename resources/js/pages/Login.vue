@@ -54,8 +54,8 @@
             return {
                 tab: 1,
                 loginForm: {
-                    email: '',
-                    password: ''
+                    email: 'sample@mail',
+                    password: 'password'
                 },
                 registerForm: {
                     name: 'kiku',
