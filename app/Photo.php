@@ -10,6 +10,9 @@ class Photo extends Model
     /** プライマリキーの型 */
     protected $keyType = 'string';
 
+    // pagination display number
+    protected $perPage = 2;
+
     /** JSONに含める属性 */
     // アクセサは定義しただけではモデルの JSON 表現には現れません。
     // ユーザー定義のアクセサを JSON 表現に含めるためには、

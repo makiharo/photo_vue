@@ -19,7 +19,16 @@ Vue.use(VueRouter)
 const routes = [
     {
         path: '/',
-        component: PhotoList
+        component: PhotoList,
+        /**
+         * <PhotoList> コンポーネントにクエリパラメータ
+         * page の値が、page という props として渡される
+         */
+        props: route => {
+            const page = route.query.page
+            // 整数と解釈されない値は「1」と見なして返す
+            return { page: /^[1-9][0-9]*$/.test(page) ? page * 1 : 1 }
+        }
     },
     {
         path: '/photos/:id',
@@ -52,6 +61,11 @@ const routes = [
 const router = new VueRouter({
     // シャープがなくなる
     mode: 'history',
+    // ページ遷移した時に見える位置の初期位置を決める
+    // 以下はスクロールそのままにせず、遷移で初期化する設定
+    scrollBehavior() {
+        return { x: 0, y: 0 }
+    },
     routes
 })
 
