@@ -5,6 +5,7 @@
         </header>
         <main>
             <div class="container">
+                <Message />
                 <!--
                     Routerviewで
                     切り替わる場所の定義
@@ -20,11 +21,13 @@
 <script>
     import { INTERNAL_SERVER_ERROR } from './util'
 
+    import Message from './components/Message.vue'
     import Navbar from './components/Navbar.vue'
     import Footer from './components/Footer.vue'
 
     export default {
         components: {
+            Message,
             Navbar,
             Footer
         },
