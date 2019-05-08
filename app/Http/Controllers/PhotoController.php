@@ -14,7 +14,23 @@ class PhotoController extends Controller
     public function __construct()
     {
         // 認証が必要
-        $this->middleware('auth');
+        $this->middleware('auth')->except(['index']);
+    }
+
+    /**
+     * 写真一覧
+     */
+    public function index()
+    {
+        /**
+         * get の代わりに paginate を使うことで、
+         * JSON レスポンスでも示した total（総ページ数）や
+         * current_page（現在のページ）といった情報が自動的に追加されます。
+         */
+        $photos = Photo::with(['owner'])
+            ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
+
+        return $photos;
     }
 
     /**
