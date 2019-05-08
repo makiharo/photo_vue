@@ -115,6 +115,13 @@
                     return false
                 }
 
+                // 成功時のメッセージ登録
+                this.$store.commit('message/setContent', {
+                    content: '写真が投稿されました！',
+                    timeout: 6000
+                })
+
+
                 // 画面遷移
                 this.$router.push(`/photos/${response.data.id}`)
             }
