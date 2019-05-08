@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+// 使用storeのimport
 import auth from './auth'
 import error from './error'
 

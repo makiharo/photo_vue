@@ -27,3 +27,6 @@ Route::get('/user', function () {
     return Auth::user();
 })->name('user');
 
+// 写真投稿
+Route::post('/photos', 'PhotoController@create')->name('photo.create');
+
