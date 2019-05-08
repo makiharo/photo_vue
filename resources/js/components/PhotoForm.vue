@@ -2,6 +2,11 @@
     <div v-show="value" class="photo-form">
         <h2 class="title">Submit a photo</h2>
         <form class="form" @submit.prevent="submit">
+            <div class="errors" v-if="errors">
+                <ul v-if="errors.photo">
+                    <li v-for="msg in errors.photo" :key="msg">{{ msg }}</li>
+                </ul>
+            </div>
             <input
                 class="form__item"
                 type="file"
@@ -19,6 +24,8 @@
 </template>
 
 <script>
+    import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
+
     export default {
         props: {
             value: {
@@ -29,7 +36,8 @@
         data() {
             return {
                 preview: null,
-                photo: null
+                photo: null,
+                errors: null
             }
         },
         methods: {
@@ -79,11 +87,21 @@
                 formData.append('photo', this.photo)
                 const response = await axios.post('/api/photos', formData)
 
+                if (response.status === UNPROCESSABLE_ENTITY) {
+                    this.errors = response.data.errors
+                    return false
+                }
+
                 // 送信完了後はリセット
                 this.reset()
 
                 // イベントを発行し、フォームを閉じるようにする
                 this.$emit('input', false)
+
+                if (response.status !== CREATED) {
+                    this.$store.commit('error/setCode', response.status)
+                    return false
+                }
 
                 // 画面遷移
                 this.$router.push(`/photos/${response.data.id}`)
