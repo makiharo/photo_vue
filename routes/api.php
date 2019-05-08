@@ -32,3 +32,4 @@ Route::post('/photos', 'PhotoController@create')->name('photo.create');
 
 // 写真一覧
 Route::get('/photos', 'PhotoController@index')->name('photo.index');
+

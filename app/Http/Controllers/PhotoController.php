@@ -14,7 +14,7 @@ class PhotoController extends Controller
     public function __construct()
     {
         // 認証が必要
-        $this->middleware('auth')->except(['index']);
+        $this->middleware('auth')->except(['index', 'download']);
     }
 
     /**
@@ -70,5 +70,32 @@ class PhotoController extends Controller
         // リソースの新規作成なので
         // レスポンスコードは201(CREATED)を返却する
         return response($photo, 201);
+    }
+
+    /**
+     * 写真ダウンロード
+     * @param Photo $photo
+     * @return \Illuminate\Http\Response
+     */
+    public function download(Photo $photo)
+    {
+        // 写真の存在チェック
+        if (!Storage::cloud()->exists($photo->filename)) {
+            abort(404);
+        }
+
+        /**
+         * レスポンスヘッダ Content-Disposition に attachment および
+         * filename を指定することで、レスポンスの内容
+         * （S3 から取得した画像ファイル）を Web ページとして
+         * 表示するのではなく、ダウンロードさせるために
+         * 保存ダイアログを開くようにブラウザに指示します。
+         */
+        $headers = [
+            'Content-Type' => 'application/octet-stream',
+            'Content-Disposition' => 'attachment; filename="' . $photo->filename . '"',
+        ];
+
+        return response(Storage::cloud()->get($photo->filename), 200, $headers);
     }
 }
