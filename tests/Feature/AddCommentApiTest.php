@@ -38,7 +38,6 @@ class AddCommentApiTest extends TestCase
         $comments = $photo->comments()->get();
 
         $response->assertStatus(201)
-            // JSONフォーマットが期待通りであること
             ->assertJsonFragment([
                 "author" => [
                     "name" => $this->user->name,
@@ -46,9 +45,7 @@ class AddCommentApiTest extends TestCase
                 "content" => $content,
             ]);
 
-        // DBにコメントが1件登録されていること
         $this->assertEquals(1, $comments->count());
-        // 内容がAPIでリクエストしたものであること
         $this->assertEquals($content, $comments[0]->content);
     }
 }
