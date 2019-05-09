@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Storage;
+use Illuminate\Support\Facades\Auth;
 
 class Photo extends Model
 {
@@ -18,24 +19,14 @@ class Photo extends Model
     // ユーザー定義のアクセサを JSON 表現に含めるためには、
     // 明示的に $appends プロパティに登録する必要があります。
     protected $appends = [
-        'url',
+        'url', 'likes_count', 'liked_by_user',
     ];
 
     /** JSONに含める属性 */
     protected $visible = [
-        'id',
-        'owner',
-        'url',
-        'comments',
+        'id', 'owner', 'url', 'comments',
+        'likes_count', 'liked_by_user',
     ];
-
-    // もしJSON構成を
-    // hiddenで表現すると以下になる
-    /** JSONに含めない属性 */
-    // protected $hidden = [
-    //     'user_id', 'filename',
-    //     self::CREATED_AT, self::UPDATED_AT,
-    // ];
 
     /** IDの桁数 */
     const ID_LENGTH = 12;
@@ -106,5 +97,46 @@ class Photo extends Model
         }
 
         return $id;
+    }
+
+    /**
+     * リレーションシップ - usersテーブル
+     * 今回は likes テーブルに当たるモデルクラスは作成しません。
+     * 特に外部キーしか中身のない中間テーブルの場合は
+     * モデルクラスは作成する必要のない場合が多いでしょう。
+     * Laravel のリレーションの機能を使えば関連するモデルから
+     * 間接的に中間テーブルを操作することができます。
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function likes()
+    {
+        // withTimestamps はこのリレーションメソッドを使って
+        // likes テーブルにデータを挿入したとき、
+        // created_at および updated_at カラムを更新させるための指定です。
+        return $this->belongsToMany('App\User', 'likes')->withTimestamps();
+    }
+
+    /**
+     * アクセサ - likes_count
+     * @return int
+     */
+    public function getLikesCountAttribute()
+    {
+        return $this->likes->count();
+    }
+
+    /**
+     * アクセサ - liked_by_user
+     * @return boolean
+     */
+    public function getLikedByUserAttribute()
+    {
+        if (Auth::guest()) {
+            return false;
+        }
+
+        return $this->likes->contains(function ($user) {
+            return $user->id === Auth::user()->id;
+        });
     }
 }
