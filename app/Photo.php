@@ -11,9 +11,9 @@ class Photo extends Model
     protected $keyType = 'string';
 
     // pagination display number
-    protected $perPage = 2;
+    // protected $perPage = 2;
 
-    /** JSONに含める属性 */
+    /** JSONに含めるアクセサ */
     // アクセサは定義しただけではモデルの JSON 表現には現れません。
     // ユーザー定義のアクセサを JSON 表現に含めるためには、
     // 明示的に $appends プロパティに登録する必要があります。
@@ -23,7 +23,9 @@ class Photo extends Model
 
     /** JSONに含める属性 */
     protected $visible = [
-        'id', 'owner', 'url',
+        'id',
+        'owner',
+        'url',
     ];
 
     // もしJSON構成を

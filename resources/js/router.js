@@ -55,6 +55,11 @@ const routes = [
             }
         }
     },
+    {
+        path: '/photos/:id',
+        component: PhotoDetail,
+        props: true
+    },
 ]
 
 // VueRouterインスタンスを作成する
