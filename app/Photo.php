@@ -26,6 +26,7 @@ class Photo extends Model
         'id',
         'owner',
         'url',
+        'comments',
     ];
 
     // もしJSON構成を
@@ -55,6 +56,15 @@ class Photo extends Model
     public function owner()
     {
         return $this->belongsTo('App\User', 'user_id', 'id', 'users');
+    }
+
+    /**
+     * リレーションシップ - commentsテーブル
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\Comment')->orderBy('id', 'desc');
     }
 
     /**
