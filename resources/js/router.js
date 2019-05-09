@@ -6,6 +6,7 @@ import PhotoList from './pages/PhotoList.vue'
 import Login from './pages/Login.vue'
 import SystemError from './pages/errors/System.vue'
 import PhotoDetail from './pages/PhotoDetail.vue'
+import NotFound from './pages/errors/NotFound.vue'
 
 // ストアの追加
 import store from './store'
@@ -60,6 +61,10 @@ const routes = [
         component: PhotoDetail,
         props: true
     },
+    {
+        path: '*',
+        component: NotFound
+    }
 ]
 
 // VueRouterインスタンスを作成する
